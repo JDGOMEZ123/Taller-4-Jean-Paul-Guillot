@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Recomendacion de películas</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="prompt" class="form-label">Escribe una descripción o prompt:</label>
+            <input type="text" class="form-control" name="prompt" id="prompt" value="{{ prompt }}" required />
+        </div>
+        <button type="submit" class="btn btn-success">Buscar película más similar</button>
+    </form>
+    {% if best_movie %}
+        <hr />
+        <h4>Película recomendada:</h4>
+        <div class="card" style="width: 18rem;">
+            <img src="{{ best_movie.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ best_movie.title }}</h5>
+                <p class="card-text">{{ best_movie.description }}</p>
+                <p class="card-text">Género: {{ best_movie.genre }}</p>
+                <p class="card-text">Año: {{ best_movie.year }}</p>
+                <p class="card-text">Similitud: {{ similarity }}</p>
+                {% if best_movie.url %}
+                    <a href="{{ best_movie.url }}" class="btn btn-primary">Ver más</a>
+                {% endif %}
+            </div>
+        </div>
+    {% elif prompt %}
+        <hr />
+        <div class="alert alert-warning" role="alert">
+            No se encontró ninguna película similar para el prompt ingresado.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
